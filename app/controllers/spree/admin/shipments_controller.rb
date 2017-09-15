@@ -25,7 +25,7 @@ module Spree
         @search = Spree::Shipment.accessible_by(current_ability, :index).ransack(params[:q])
         @shipments = @search.result.
           page(params[:page]).
-          per(params[:per_page] || Spree::Config[:orders_per_page])
+          per(params[:per_page] || Spree::Config[:admin_orders_per_page])
 
         # Restore dates
         params[:q][:created_at_gt] = created_at_gt
