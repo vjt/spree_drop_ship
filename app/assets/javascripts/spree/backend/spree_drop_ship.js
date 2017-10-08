@@ -1,2 +1,2 @@
 //= require spree/backend
-// Shipments AJAX API
+//= require spree/backend/supplier_variant_cost

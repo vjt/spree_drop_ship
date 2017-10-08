@@ -4,6 +4,7 @@ Spree::Core::Engine.add_routes do
     resource :drop_ship_settings
     resources :shipments
     resources :suppliers
+    resources :supplier_variants, only: :update
   end
 
 end
