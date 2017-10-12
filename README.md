@@ -1,3 +1,13 @@
+# About this fork
+
+This is a work in progress to build a drop-shipping store with no payments,
+and where each supplier sets its own price. It is closely related and
+intertwined with the spree\_marketplace gem, that will be absorbed here
+after.
+
+Not for the faint hearted, many serviceable parts inside but no tests (yet)
+and no documentation. Use at your own risk!
+
 # Spree Drop Ship
 
 [![Build Status](https://travis-ci.org/spree-contrib/spree_drop_ship.png)](https://travis-ci.org/spree-contrib/spree_drop_ship)
