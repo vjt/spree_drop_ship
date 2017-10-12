@@ -4,13 +4,26 @@
 <td class="sku"><%= product.sku rescue '' %></td>
 <td class="image"><%= mini_image product, class: "thumbnail" %></td>
 <td>
-  <% if try_spree_current_user && try_spree_current_user.supplier? %>
+  <% if (user = try_spree_current_user) && user.supplier? %>
     <%= link_to product.try(:name), stock_admin_product_path(product)%>
   <% else %>
     <%= link_to product.try(:name), edit_admin_product_path(product) %>
   <% end %>
 </td>
-<td><%= product.display_price.to_html rescue '' %></td>
+<td>
+  <% if (user = try_spree_current_user) && user.supplier? %>
+    <%= product.master.supplier_price(user.supplier).display_price.to_html %>
+  <% else %>
+    <% if product.suppliers.present? %>
+      <% product.suppliers.order(:name).each do |supplier| %>
+        <%= supplier.name %>:
+        <%= product.master.supplier_price(supplier).display_price.to_html %><br/>
+      <% end %>
+    <% else %>
+      <em>No suppliers defined!</em>
+    <% end %>
+  <% end %>
+</td>
 <td class="actions" data-hook="admin_products_index_row_actions">
   <%= link_to_edit product, :no_text => true, :class => 'edit' if can?(:edit, product) && !product.deleted? %>
   <%= link_to_clone product, :no_text => true, :class => 'clone' if can?(:clone, product) %>

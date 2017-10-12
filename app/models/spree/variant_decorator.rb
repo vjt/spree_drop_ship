@@ -6,6 +6,15 @@ module Spree
 
     before_create :populate_for_suppliers
 
+    def supplier_price(supplier)
+      supplier_variant = self.supplier_variants.where(supplier_id: supplier).first
+      return unless supplier_variant
+
+      price = default_price.dup
+      price.amount = supplier_variant.cost
+      return price
+    end
+
     private
 
     durably_decorate :create_stock_items, mode: 'strict', sha: '98704433ac5c66ba46e02699f3cf03d13d4f1281' do
