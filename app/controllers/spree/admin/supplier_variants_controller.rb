@@ -1,8 +1,12 @@
 class Spree::Admin::SupplierVariantsController < Spree::Admin::ResourceController
 
   def update
-    @object.cost = params[:cost]
-    @object.save!
+    @variant.class.transaction do
+      @variant.cost = params[:cost]
+      @variant.save!
+
+      @variant.set_best_price_from_suppliers!
+    end
 
     head :ok
   end
@@ -10,7 +14,7 @@ class Spree::Admin::SupplierVariantsController < Spree::Admin::ResourceControlle
   protected
 
   def find_resource
-    Spree::SupplierVariant.find(params[:id])
+    @variant = Spree::SupplierVariant.find(params[:id])
   end
 
 end
