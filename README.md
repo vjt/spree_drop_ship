@@ -2,8 +2,8 @@
 
 This is a work in progress to build a drop-shipping store with no payments,
 and where each supplier sets its own price. It is closely related and
-intertwined with the spree\_marketplace gem, that will be absorbed here
-after.
+intertwined with the [spree\_marketplace](https://github.com/vjt/spree_marketplace)
+gem, that will be absorbed here after.
 
 Not for the faint hearted, many serviceable parts inside but no tests (yet)
 and no documentation. Use at your own risk!
