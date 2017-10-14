@@ -15,6 +15,10 @@ module Spree
       return price
     end
 
+    def best_supplier
+      self.suppliers.order("#{SupplierVariant.table_name}.cost").first
+    end
+
     private
 
     durably_decorate :create_stock_items, mode: 'strict', sha: '98704433ac5c66ba46e02699f3cf03d13d4f1281' do

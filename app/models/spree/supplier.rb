@@ -61,6 +61,25 @@ class Spree::Supplier < Spree::Base
     stock_locations.select { |sl| sl.available?(variant) }
   end
 
+  # Returns products for which this supplier offers the best price
+  #
+  def best_products
+    Spree::Product.where(%[ id in (
+      select id from (
+        select p.id, first_value(sv.supplier_id) over (partition by p.id order by cost) as supplier_id
+        from spree_products p
+        inner join spree_variants          v  on v.product_id = p.id
+        inner join spree_supplier_variants sv on sv.variant_id = v.id and sv.cost > 0
+      ) bs where supplier_id = ?
+    ) ], self.id)
+  end
+
+  # Returns +best_products+ but the ones passed as an argument
+  #
+  def best_products_excluding(products)
+    best_products.where.not(id: products)
+  end
+
   #==========================================
   # Protected Methods
 
