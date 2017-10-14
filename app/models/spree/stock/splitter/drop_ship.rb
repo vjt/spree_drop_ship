@@ -14,14 +14,13 @@ module Spree
             drop_ship.each do |content|
               # Select the related variant
               variant = content.variant
-              # Select suppliers ordering ascending according to cost.
-              suppliers = variant.supplier_variants.order("spree_supplier_variants.cost ASC").map(&:supplier)
-              # Select first supplier that has stock location with avialable stock item.
-              available_supplier = suppliers.detect do |supplier| 
-                supplier.stock_locations_with_available_stock_items(variant).any?
-              end
+
+              # Select supplier according to cost.
+              available_supplier = variant.best_supplier
+
               # Select the first available stock location with in the available_supplier stock locations.
               stock_location = available_supplier.stock_locations_with_available_stock_items(variant).first
+
               # Add to any existing packages or create a new one.
               if existing_package = split_packages.detect { |p| p.stock_location == stock_location }
                 existing_package.contents << content
