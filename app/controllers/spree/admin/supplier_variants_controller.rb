@@ -1,12 +1,8 @@
 class Spree::Admin::SupplierVariantsController < Spree::Admin::ResourceController
 
   def update
-    @variant.class.transaction do
-      @variant.cost = params[:cost]
-      @variant.save!
-
-      @variant.set_best_price_from_suppliers!
-    end
+    @variant.cost = params[:cost]
+    @variant.save!
 
     head :ok
   end

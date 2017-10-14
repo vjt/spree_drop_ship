@@ -3,11 +3,15 @@ module Spree
     belongs_to :supplier
     belongs_to :variant
 
+    after_save :set_best_price_from_suppliers!
+
+    private
+
     # Gets the supplier with the best price and updates the related product's
     # price with it.
     def set_best_price_from_suppliers!
       price = self.variant.default_price
-      price.amount = self.best_supplier_price
+      price.amount = best_supplier_price
       price.save!
     end
 
