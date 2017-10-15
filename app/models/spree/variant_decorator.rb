@@ -31,10 +31,14 @@ module Spree
       self.supplier_variants.where(supplier_id: supplier).first
     end
 
-    # Returns the supplier with the lowest price
+    # Returns the supplier with the lowest price and available stock.
+    # TODO dry and with best_supplier_price and make this more AR-ish.
     #
     def best_supplier
-      self.suppliers.order("#{SupplierVariant.table_name}.cost").first
+      self.suppliers.joins(:stock_locations => :stock_items).
+        where('spree_stock_items.variant_id = spree_supplier_variants.variant_id').
+        where('spree_stock_items.count_on_hand > 0').
+        order('spree_supplier_variants.cost').first
     end
 
     # Sets the product price from the suppliers' lowest price
