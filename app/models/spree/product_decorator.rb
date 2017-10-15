@@ -18,6 +18,13 @@ Spree::Product.class_eval do
     suppliers.present?
   end
 
+  # Returns only product having a supplier variant defined and a price set.
+  #
+  scope :available_from_suppliers, -> {
+    where(id: joins(:variants_including_master => :supplier_variants).
+      where('spree_prices.amount > 0'))
+  }
+
   private
 
   def populate_for_supplier!(supplier)
