@@ -5,10 +5,14 @@ module Spree
 
         def split(packages)
           split_packages = []
+
           packages.each do |package|
             # Package fulfilled items together.
             fulfilled = package.contents.select { |content| content.variant.suppliers.count == 0 }
-            split_packages << build_package(fulfilled)
+            if fulfilled.size > 0
+              split_packages << build_package(fulfilled)
+            end
+
             # Determine which supplier to package drop shipped items.
             drop_ship = package.contents.select { |content| content.variant.suppliers.count > 0 }
             drop_ship.each do |content|
@@ -32,6 +36,7 @@ module Spree
               end
             end
           end
+
           return_next split_packages
         end
 
