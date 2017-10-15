@@ -21,6 +21,9 @@ module Spree
               # Select the first available stock location with in the available_supplier stock locations.
               stock_location = available_supplier.stock_locations_with_available_stock_items(variant).first
 
+              # Should not happen, but here just in case.
+              raise 'BUG: no available stock locations!' if stock_location.nil?
+
               # Add to any existing packages or create a new one.
               if existing_package = split_packages.detect { |p| p.stock_location == stock_location }
                 existing_package.contents << content

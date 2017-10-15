@@ -15,8 +15,25 @@ module Spree
       return price
     end
 
+    # Return the supplier with the lowest price
+    #
     def best_supplier
       self.suppliers.order("#{SupplierVariant.table_name}.cost").first
+    end
+
+    def set_price_from_suppliers_best_price!
+      price = self.default_price
+      price.amount = best_supplier_price || 0.0
+      price.save!
+    end
+
+    # Get the best supplier price as of now given available stock items.
+    #
+    def best_supplier_price
+      self.supplier_variants.joins(:supplier => {:stock_locations => :stock_items}).
+        where('spree_stock_items.variant_id = spree_supplier_variants.variant_id').
+        where('spree_stock_items.count_on_hand > 0').
+        minimum(:cost)
     end
 
     private
