@@ -17,7 +17,9 @@
     <% if product.suppliers.present? %>
       <% product.suppliers.order(:name).each do |supplier| %>
         <%= supplier.name %>:
-        <%= product.master.supplier_price(supplier).display_price.to_html %><br/>
+        <%= product.master.supplier_price(supplier).display_price.to_html %>
+        (<%= product.master.supplier_count_on_hand(supplier) %> in stock)
+        <br/>
       <% end %>
     <% else %>
       <em>No suppliers defined!</em>
