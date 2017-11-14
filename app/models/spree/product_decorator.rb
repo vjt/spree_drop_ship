@@ -21,7 +21,7 @@ Spree::Product.class_eval do
   # Returns only product having a supplier variant defined and a price set.
   #
   scope :available_from_suppliers, -> {
-    where(id: joins(:variants_including_master => :supplier_variants).
+    where(id: unscoped.joins(:variants_including_master => [:supplier_variants, :prices]).
       where('spree_prices.amount > 0'))
   }
 
